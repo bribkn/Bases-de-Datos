@@ -344,3 +344,91 @@ conn.commit()
 alumno = cur.fetchone()
 print ("Insertamos en Alumnos :" )
 print(alumno)
+
+#------------------------------------------------------------------------------------------
+#-----------------------------Seed Tiene---------------------------------------------------
+#------------------------------------------------------------------------------------------
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (123821923,1)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (123821923,2)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (189232331,3)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (193812323,4)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (189232331,5)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+
+print(tiene)
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (198123721,6)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
+
+sql = """
+insert into tiene(usuario_rut,alumno_id) values (106545618,7)
+returning
+usuario_rut,alumno_id;
+"""
+
+cur.execute(sql)
+conn.commit()
+tiene = cur.fetchone()
+print ("Insertamos en Tiene :" )
+print(tiene)
