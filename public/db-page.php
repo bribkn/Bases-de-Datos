@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Busqueda en DB</title>
-        <!-- INCLUDE STYLES -->
-        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-        <link rel="stylesheet" href="inc/style.css">
-        <link rel="stylesheet" href="inc/fonts.css">
-        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    </head>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 , user-scalable=no">
+	<title>DB Page</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/fonts.css">
+</head>
 
-    <!-- PAGE STARTS HERE -->
-    <body style="background-color:#607f89">
-        <!-- REQUIRE LOGIN & MENUS -->
-        <?php
-            include 'inc/menu_front.php';
-            require_once 'inc/config.php';
-        ?>
+<body>
+    <!--  INCLUDE JAVASCRIPTs -->
+	<script src="https://code.jquery.com/jquery-latest.js"></script>
+	<script src="inc/menu.js"></script>
+	<script src="inc/show-option.js"></script>
+	<script src="inc/slider.js"></script>
 
-        <div class="container">
-            <center>
-                <div class="wrapper">
-                    <?php
+	<!--  HEADER START -->
+	<header>
+        <!-- REQUIRE LOGIN & INCLUDE MENUS -->
+		<?php require_once 'inc/config.php'; require 'inc/nav-menu.php'; ?>
+	</header>
+
+	<!--  PAGE START -->
+	<section class="main">
+		<div class="wrapper">
+			<!--  FRONT MESSAGE -->
+			<div class="mensaje">
+				<h1>CAElculadora</h1>
+			</div>
+
+			<!--  LEFT BLOCK CONTAINER -->
+			<div class="articulo">
+				<article>
+					<!--  LEFT BLOCK TITLE -->
+					<h3>CAE</h3><br>
+
+					<!--  LEFT BLOCK BODY -->
+					Bienvenido al sitio de Transporte Escolar.
+					<?php
                         // get results from database
                         $query_alumnos = "SELECT * FROM alumnos;";
                         $result_alumnos = pg_query($connection, $query_alumnos);
@@ -139,6 +154,7 @@
                         echo "<thead><tr><th><center>Rut Usuario</center></th> <th><center>ID Alumno</center></th> </thead>";
 
                         echo "<tbody>";
+
                         // loop through results of database query, displaying them in the table
                         while($fila = pg_fetch_row( $result_tiene )) {
                             // echo out the contents of each row into a table
@@ -147,61 +163,28 @@
                             echo '<td><center>' . $fila[1] . '</center></td>';
                             echo "</tr>";
                         }
+
                         // close table>
                         echo "</tbody></table></div>";
                         echo "<br><br><br>";
-
-
                     ?>
-                </div>
-            </center>
-        </div>
-    </body>
+				</article>
+                <!--  LEFT BLOCK BODY END -->
+			</div>
+            <!--  LEFT BLOCK CONTAINER END -->
 
-    <script>
-        function sortTable(table, col, reverse) {
-            var tb = table.tBodies[0], // use `<tbody>` to ignore `<thead>` and `<tfoot>` rows
-                tr = Array.prototype.slice.call(tb.rows, 0), // put rows into array
-                i;
-            reverse = -((+reverse) || -1);
+			<!--  RIGHT BLOCK CONTAINER -->
+			<aside>
+				<?php include 'inc/tips-menu.php' ?>
+			</aside>
+            <!--  RIGHT BLOCK END-->
+		</div>
+	</section>
 
-            tr = tr.sort(function (a, b) { // sort rows
-
-
-                if(!isNaN(a.cells[col].textContent) && !isNaN(b.cells[col].textContent))
-                    return reverse * ((+a.cells[col].textContent) - (+b.cells[col].textContent))
-                return reverse // `-1 *` if want opposite order
-                    * (a.cells[col].textContent.trim() // using `.textContent.trim()` for test
-                        .localeCompare(b.cells[col].textContent.trim())
-                       );
-            });
-            for(i = 0; i < tr.length; ++i) tb.appendChild(tr[i]); // append each row in order
-        }
-
-        function makeSortable(table) {
-            var th = table.tHead, i;
-            th && (th = th.rows[0]) && (th = th.cells);
-            if (th) i = th.length;
-            else return; // if no `<thead>` then do nothing
-            while (--i >= 0) (function (i) {
-                var dir = 1;
-                th[i].addEventListener('click', function () {sortTable(table, i, (dir = 1 - dir))});
-            }(i));
-        }
-
-        function makeAllSortable(parent) {
-            parent = parent || document.body;
-            var t = parent.getElementsByTagName('table'), i = t.length;
-            while (--i >= 0) makeSortable(t[i]);
-        }
-
-        window.onload = function () {makeAllSortable();};
-    </script>
-
-
-
-
-
-
-    </body>
+	<footer>
+		<div class="wrapper">
+			<p>Transporte Escolar, por Martín Saavedra y Brían Bastías.</p>
+		</div>
+	</footer>
+</body>
 </html>

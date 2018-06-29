@@ -1,12 +1,13 @@
 <?php
-    $server = "localhost:5432";
+    $server = "localhost";
+    $port = 5432;
     $db = "transporte_escolar";
-    $user = "brianbastias";
+    $user = "martinsaavedran";
     $password = "";
 
-    $connection = pg_connect("host=localhost port=5432 dbname=transporte_escolar user=brianbastias password=");
+    $connection = pg_connect("host=$server port=$port dbname=$db user=$user password=$password");
 
     if (!$connection) {
-        die("CONEXION ERRONEA: <br><br>");
+        die("CONEXION ERRONEA");
     }
 ?>

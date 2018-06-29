@@ -7,15 +7,11 @@ function main(){
 		// $('nav').toggle();
 
 		if(count == 1){
-			$('nav').animate({
-				left: '0'
-			});
+			$('nav').animate( { top: '0' } );
 			count = 0;
 		} else {
 			count = 1;
-			$('nav').animate({
-				left: '-100%'
-			});
+			$('nav').animate({ top: '-100%' });
 		}
 	});
 };

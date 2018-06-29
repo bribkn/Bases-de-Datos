@@ -1,5 +1,5 @@
 host = "localhost"
 port = 5432
-user = "brianbastias"
-passwd=""
+user = "martinsaavedran"
+passwd = ""
 database = "transporte_escolar"
