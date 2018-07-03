@@ -1,65 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0 , user-scalable=no">
-	<title>DB Page</title>
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/fonts.css">
-</head>
+<?php
+	// STARTING SESSION //
+	session_start();
 
-<body>
-    <!--  INCLUDE JAVASCRIPTs -->
-	<script src="https://code.jquery.com/jquery-latest.js"></script>
-	<script src="inc/menu.js"></script>
-	<script src="inc/show-option.js"></script>
-	<script src="inc/slider.js"></script>
+	// PAGE RENDERING //
+	include_once 'inc/header.php';
+	include_once 'inc/body.php';
 
-	<!--  HEADER START -->
-	<header>
-        <!-- REQUIRE LOGIN & INCLUDE MENUS -->
-		<?php require_once 'inc/config.php'; require 'inc/nav-menu.php'; ?>
-	</header>
+	// ADDING DATA TO BE SHOWN //
+	if (empty($_GET['page']))
+		$_GET['page'] = 'home';
 
-	<!--  PAGE START -->
-	<section class="main">
-		<div class="wrapper">
-			<!--  FRONT MESSAGE -->
-			<div class="mensaje">
-				<h1>CAElculadora</h1>
-			</div>
-			<!--  FRONT MESSAGE END -->
+	if(!file_exists("pages/".urlencode($_GET['page']).".php"))
+		$_GET['page']= '404';
 
-			<!--  LEFT BLOCK CONTAINER -->
-			<div class="articulo">
-				<article>
-					<!--  LEFT BLOCK TITLE -->
-					<h3>CAE</h3><br>
-					<!--  LEFT BLOCK END TITLE -->
+	$actualPage = 'pages/'.urlencode($_GET['page']).'.php';
+	include ($actualPage);
 
-					<!--  LEFT BLOCK BODY -->
-					Bienvenido al sitio de Transporte Escolar.
-					<!--  LEFT BLOCK END BODY -->
-				</article>
-                <!--  LEFT BLOCK BODY END -->
-			</div>
-            <!--  LEFT BLOCK CONTAINER END -->
-
-
-
-			<!--  RIGHT BLOCK CONTAINER -->
-			<aside>
-				<?php include 'inc/tips-menu.php' ?>
-			</aside>
-            <!--  RIGHT BLOCK END-->
-		</div>
-	</section>
-	<!--  PAGE END -->
-
-	<footer>
-		<div class="wrapper">
-			<p>Transporte Escolar, por Martín Saavedra y Brían Bastías.</p>
-		</div>
-	</footer>
-</body>
-</html>
+	// END RENDERING //
+	include_once 'inc/footer.php';
+?>

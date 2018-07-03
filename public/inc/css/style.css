@@ -2,23 +2,42 @@
 body { background:#f2f2f2; color:#333; font-family:Arial, helvetica, sans-serif; }
 
 /* INPUT FIELDS */
-input { width: 80%; padding: 12px 20px; margin: 8px; border: none; border-radius: 5px; }
-input[type=button], input[type=submit], input[type=reset] { min-width: 120px; width: 25%; background-color: #F24C27; border: none;
-                                                            color: white; padding: 16px 32px; margin: 20px 2px 0px 0px;
-                                                            cursor: pointer; }
-
-.checkboxes input[type="text"] { width: 40%; }
-.checkboxes input[type="tel"] {width: 40%;}
-.checkboxes input[type="checkbox"] { height: 18px; width: 18px; }
+input { width: 40%; padding: 12px 20px; margin: 8px; border: none; border-radius: 5px; box-sizing: border-box; }
+input[type=button],
+input[type=submit],
+input[type=reset] { min-width: 120px; width: 25%; background-color: #F24C27; border: none;
+                    color: white; padding: 16px 32px; margin: 20px 2px 0px 0px; cursor: pointer; }
 
 /* TABLES */
-table tr:nth-child(even) { background-color: #607f60; }
-table tr:nth-child(odd) { background-color: #607f99; }
-table td{ padding: 5px; }
-table th { color: white; background-color: black; padding: 5px; cursor: pointer; }
+.custom-table{ margin:0px; }
+
+table { font-family: arial, sans-serif; border-collapse: collapse; width: 100%; }
+table.Info tr th,
+table.Info tr:first-child td{ border-top: 1px solid #bbb; }
+
+td, th { text-align: left; padding: 8px; cursor: pointer; color: black; }
+th { background-color: #dddaaa; }
+tr {  }
+
+tr:nth-child(odd) { background-color: #dddddd; }
+tr:nth-child(even) { background-color: #ffffff; }
+
+/* top-left border-radius */
+table tr:first-child th:first-child,
+table.Info tr:first-child td:first-child { border-top-left-radius: 6px; }
+
+/* top-right border-radius */
+table tr:first-child th:last-child,
+table.Info tr:first-child td:last-child { border-top-right-radius: 6px; }
+
+/* bottom-left border-radius */
+table tr:last-child td:first-child { border-bottom-left-radius: 6px; }
+
+/* bottom-right border-radius */
+table tr:last-child td:last-child { border-bottom-right-radius: 6px; }
 
 /* LINKS */
-a { text-decoration: none; color:#F24C27; }
+a { text-decoration: bold; color:#F24C27; text-decoration: none; }
 
 /* WRAPPER DIV */
 .wrapper { max-width: 1000px; width:80%; margin:auto; overflow: hidden; }
@@ -42,15 +61,23 @@ header nav ul li a:hover { color: #fff; background: #F24C27; }
 
 /* BODY STRUCT */
 .articulo { float: left; width: 69%; padding: 20px; background:#024959; color: #fff; border-radius: 5px; margin-right: 1%;
-            margin-bottom: 20px; text-align: center; }
+            margin-bottom: 20px; }
+.articulo titulo { text-align: center; width: 50%; margin: auto; padding-bottom: 2px; }
+.articulo titulo h2 { border-bottom: 1px solid white; margin-bottom: 15px; }
+
+.articulo subtitulo h4 { margin-bottom: 5px; }
 
 /* RIGHT MENU */
 aside { float: left; width: 29%; background:#024959; color:#fff; padding:20px; border-radius:5px; margin-left: 1%;
         margin-bottom: 20px; }
 .widget ul { margin-left:20px; }
 .widget ul li { margin:10px 0; width: 100%; }
-.widget ul li a { color:#fff; }
-.widget ul li a:hover { text-decoration: underline; }
+.widget ul li a:hover { }
+
+.widget titulo { text-align: center; width: 50%; margin: auto; padding-bottom: 2px; }
+.widget titulo h2 { border-bottom: 1px solid white; margin-bottom: 15px; }
+
+.widget subtitulo h4 { margin-bottom: 5px; }
 
 /* FOOTER */
 footer { width: 100%; background:#333; color:#fff; padding: 50px 0; }
@@ -58,9 +85,9 @@ footer p { text-align:center; }
 
 /* RESPONSIVE DESIGN */
 @media screen and (max-width: 1000px) {
-    header { padding: 0px; margin-left: 0px; height: 83px; }
-    header nav { width: 100%; height: auto; left: 0; top: -100%; margin-top: 83px; position: fixed; box-shadow: 10px 10px black; } /* Container de todos los botones */
-    header nav ul { text-align: left; background: #024959; border-top: 4px solid black;}
+    header { padding: 0px; margin-left: 0px; height: 83px; box-shadow: 0px 0px 1px 1px #000000; }
+    header nav { width: 100%; height: auto; left: 0; top: 0; top: -100%; margin-top: 80px; position: fixed; box-shadow: 0px 0px 1px 1px #000000; } /* Container de todos los botones */
+    header nav ul { text-align: left; background: #024959; border-top: 4px solid black; }
     header nav ul li { margin: 0px; display: block; float: none; border-left: 0px solid black; border-right: 0px solid black; border-top: 1px solid black; } /* Cada uno de los botones de la lista */
     header nav ul li a { padding: 15px; background: #024959; color: white; border-radius: 0px; }
     header nav ul li a:hover { border-radius: 0px; }
