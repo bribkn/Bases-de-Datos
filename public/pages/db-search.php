@@ -8,78 +8,96 @@
             ob_start();
             session_start();
 
+            $type = $_GET['type'];
+
+            if ($type == 1) { //Buscar todos los alumnos transportados por un tío.
+                $nombre_tio = $_POST['nombre_tio'];
+                $apellido_tio = $_POST['apellido_tio'];
+                $rut_tio = $_POST['rut_tio'];
+
+                $sql = "SELECT u.rut, u.nombre, u.apellido, u.telefono, a.nombre, a.apellido, a.nivel,
+                            a.patente_furgon, a.curso
+                        FROM alumnos as a, furgones as f, usuarios as u, roles as r
+                        WHERE a.patente_furgon = f.patente AND f.rut_tio = u.rut
+                        AND u.rut = r.usuario_rut AND r.rol = 'tio'
+                        AND u.nombre LIKE '%$nombre_tio%' AND u.apellido LIKE '%$apellido_tio%'
+                        AND CAST(u.rut AS TEXT) LIKE '%$rut_tio%'
+                        ";
+                $result = pg_query($connection, $sql);
+
+                echo "<subtitulo><h4>Listado de alumnos transportados por el tío.</h4><subtitulo>";
+                echo "<div style='overflow-x:auto;'><div class='custom-table'><table>";
+                echo "<tr><th><center>RUT Tío</center></th> <th><center>Nombre Tío</center></th> <th><center>Apellido Tío</center></th>
+                    <th><center>Teléfono Tío</center></th> <th><center>Nombre Alumno</center></th> <th><center>Apellido Alumno</center></th>
+                    <th><center>Nivel Alumno</center></th> <th><center>Patente Furgón</center></th> <th><center>Curso Alumno</center></th>";
+
+                // loop through results of database query, displaying them in the table
+                while($fila = pg_fetch_row($result)) {
+                    // echo out the contents of each row into a table
+                    echo "<tr>";
+                    echo '<td><center>' . $fila[0] . '</center></td>';
+                    echo '<td><center>' . $fila[1] . '</center></td>';
+                    echo '<td><center>' . $fila[2] . '</center></td>';
+                    echo '<td><center>' . $fila[3] . '</center></td>';
+                    echo '<td><center>' . $fila[4] . '</center></td>';
+                    echo '<td><center>' . $fila[5] . '</center></td>';
+                    echo '<td><center>' . $fila[6] . '</center></td>';
+                    echo '<td><center>' . $fila[7] . '</center></td>';
+                    echo '<td><center>' . $fila[8] . '</center></td>';
+                    echo "</tr>";
+                }
+                // close table>
+                echo "</table></div></div>";
+                echo "<br><br><br>";
+            }else if($type == 2){ //Buscar todos los alumnos de un apoderado.
+
+            }else if($type == 3){ //Buscar un tío por su nombre y/o apellido.
+                $nombre_tio = $_POST['nombre_tio'];
+                $apellido_tio = $_POST['apellido_tio'];
+                $rut_tio = $_POST['rut_tio'];
+
+                $sql = "SELECT u.rut, u.nombre, u.apellido, u.telefono, u.direccion, f.patente, f.marca, f.modelo, f.capacidad, f.ano
+                        FROM roles as r, usuarios as u, furgones as f
+                        WHERE r.usuario_rut=u.rut AND u.rut=f.rut_tio AND r.rol='tio'
+                        AND u.nombre LIKE '%$nombre_tio%' AND u.apellido LIKE '%$apellido_tio%'
+                        AND CAST(u.rut AS TEXT) LIKE '%$rut_tio%'
+                        ";
+                $result = pg_query($connection, $sql);
+
+                echo "<subtitulo><h4>Listado de tíos</h4><subtitulo>";
+                echo "<div style='overflow-x:auto;'><div class='custom-table'><table>";
+                echo "<tr><th><center>RUT</center></th> <th><center>Nombre</center></th> <th><center>Apellido</center></th> <th><center>Teléfono</center></th> <th><center>Dirección</center></th> <th><center>Patente</center></th> <th><center>Marca</center></th> <th><center>Modelo</center></th> <th><center>Capacidad</center></th> <th><center>Año</center></th>";
+
+                // loop through results of database query, displaying them in the table
+                while($fila = pg_fetch_row($result)) {
+                    // echo out the contents of each row into a table
+                    echo "<tr>";
+                    echo '<td><center>' . $fila[0] . '</center></td>';
+                    echo '<td><center>' . $fila[1] . '</center></td>';
+                    echo '<td><center>' . $fila[2] . '</center></td>';
+                    echo '<td><center>' . $fila[3] . '</center></td>';
+                    echo '<td><center>' . $fila[4] . '</center></td>';
+                    echo '<td><center>' . $fila[5] . '</center></td>';
+                    echo '<td><center>' . $fila[6] . '</center></td>';
+                    echo '<td><center>' . $fila[7] . '</center></td>';
+                    echo '<td><center>' . $fila[8] . '</center></td>';
+                    echo '<td><center>' . $fila[9] . '</center></td>';
+                    echo "</tr>";
+                }
+                // close table>
+                echo "</table></div></div>";
+                echo "<br><br><br>";
+            }else if($type == 4) { //Buscar a un tío por alguno de sus alumnos transportados.
+
+            }else if(!isset($type)){ //ERROR
+
+            }else{
+                header("location:index.php?page=404");
+            }
+
             if (!(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true)) {
                 die ("<h2>Debes estar conectado para ver esta página.</h2></article></div>");
             }
-
-            // Define variables and initialize with empty values
-            $username = $password = "";
-            $username_err = $password_err = "";
-
-            // Processing form data when form is submitted
-            if($_SERVER["REQUEST_METHOD"] == "POST"){
-                // Check if username is empty
-                if(empty(trim($_POST["username"]))){
-                    $username_err = 'Por favor ingresa tu usuario.';
-                } else {
-                    $username = trim($_POST["username"]);
-                }
-
-                // Check if password is empty
-                if(empty(trim($_POST['password']))){
-                    $password_err = 'Por favor ingresa tu password.';
-                } else {
-                    $password = trim($_POST['password']);
-                }
-
-                // Validate credentials
-                if(empty($username_err) && empty($password_err)){
-                    // Prepare a select statement
-                    $sql = "SELECT nick, password FROM usuarios WHERE nick = $1";
-
-                    if(pg_prepare($connection, "USERsearchQuery", $sql)){
-                        //SET PARAMETERS//
-                        $param_username = $username;
-
-                        // Attempt to execute the prepared statement
-                        if($result = pg_execute($connection, "USERsearchQuery", array($param_username))) {
-                            // Check if username exists, if yes then verify password
-                            if(pg_num_rows($result) == 1){
-                                if($userData = pg_fetch_array($result)){
-                                    if(password_verify($password, $userData["password"])){
-                                        /* Password is correct, so start a new session and
-                                        save the username to the session */
-                                        session_start();
-                                        $_SESSION['username'] = $username;
-                                        $_SESSION['loggedin'] = true;
-
-                                        header("location:index.php?page=account");
-                                    }else{
-                                        // Display an error message if password is not valid
-                                        $password_err = 'La password no es valida.';
-                                    }
-                                }
-                            }else{
-                                // Display an error message if username doesn't exist
-                                $username_err = 'No hay ninguna cuenta con ese nombre.';
-                            }
-                        }else{
-                            echo "Error desconocido.";
-                        }
-                    }
-
-                    // Close statement
-                    mysqli_stmt_close($stmt);
-                }
-
-                // Close connection
-                mysqli_close($connection);
-            }
-
-            //Buscar todos los alumnos transportados por un tío.
-            //Buscar todos los alumnos de un apoderado.
-            //Buscar un tío por su nombre y/o apellido.
-            //Buscar a un tío por alguno de sus alumnos transportados.
         ?>
 
         <!-- <script src="inc/form-opener.js"></script> -->
@@ -102,20 +120,108 @@
             </form>
         </center>
 
-        <form name="1" id="1" style="display:none">
-            hola
+        <!--  FIRST OPTION -->
+        <!--  Buscar todos los alumnos transportados por un tío. -->
+        <form name="1" id="1" style="display:none" action="index.php?page=db-search&type=1" method="post">
+            <subtitulo><h4>Buscar todos los alumnos transportados por un tío.</h4></subtitulo>
+            <subtitulo><h4>Si desconoces algún campo, simplemente déjalo en blanco.</h4></subtitulo>
+
+            <div class="form-group <?php echo (!empty($nombre_tio_err)) ? 'has-error' : ''; ?>">
+                <label>Nombre del tío</label>
+                <input type="text" name="nombre_tio" class="form-control" value="<?php echo $nombre_tio; ?>">
+                <span class="help-block"><?php echo $nombre_tio_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($apellido_tio_err)) ? 'has-error' : ''; ?>">
+                <label>Apellido del tío</label>
+                <input type="text" name="apellido_tio" class="form-control">
+                <span class="help-block"><?php echo $apellido_tio_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($rut_tio_err)) ? 'has-error' : ''; ?>">
+                <label>RUT del tío</label>
+                <input type="text" name="rut_tio" class="form-control">
+                <span class="help-block"><?php echo $rut_tio_err; ?></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Ingresa">
+            </div>
         </form>
 
-        <form name="2" id="2" style="display:none">
-            hola2
+        <!--  SECOND OPTION -->
+        <!--  Buscar todos los alumnos de un apoderado. -->
+        <form name="2" id="2" style="display:none" action="index.php?page=db-search&type=2" method="post">
+            <subtitulo><h4>Buscar todos los alumnos de un apoderado.</h4></subtitulo>
+            <subtitulo><h4>Si desconoces algún campo, simplemente déjalo en blanco.</h4></subtitulo>
+
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>Username</label>
+                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control">
+                <span class="help-block"><?php echo $password_err; ?></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Ingresa">
+            </div>
         </form>
 
-        <form name="3" id="3" style="display:none">
-            hola3
+        <!--  THIRD OPTION -->
+        <!--  Buscar un tío por su nombre, apellido y/o RUT. -->
+        <form name="3" id="3" style="display:none" action="index.php?page=db-search&type=3" method="post">
+            <subtitulo><h4>Buscar un tío por su nombre y/o apellido.</h4></subtitulo>
+            <subtitulo><h4>Si desconoces algún campo, simplemente déjalo en blanco.</h4></subtitulo>
+
+            <div class="form-group <?php echo (!empty($nombre_tio_err)) ? 'has-error' : ''; ?>">
+                <label>Nombre del tío</label>
+                <input type="text" name="nombre_tio" class="form-control" value="<?php echo $nombre_tio; ?>">
+                <span class="help-block"><?php echo $nombre_tio_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($apellido_tio_err)) ? 'has-error' : ''; ?>">
+                <label>Apellido del tío</label>
+                <input type="text" name="apellido_tio" class="form-control">
+                <span class="help-block"><?php echo $apellido_tio_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($rut_tio_err)) ? 'has-error' : ''; ?>">
+                <label>RUT del tío</label>
+                <input type="text" name="rut_tio" class="form-control">
+                <span class="help-block"><?php echo $rut_tio_err; ?></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Ingresa">
+            </div>
         </form>
 
-        <form name="4" id="4" style="display:none">
-            hola4
+        <!--  FOURTH OPTION -->
+        <!--  Buscar a un tío por alguno de sus alumnos transportados. -->
+        <form name="4" id="4" style="display:none" action="index.php?page=db-search&type=4" method="post">
+            <subtitulo><h4>Buscar a un tío por alguno de sus alumnos transportados.</h4></subtitulo>
+            <subtitulo><h4>Si desconoces algún campo, simplemente déjalo en blanco.</h4></subtitulo>
+
+            <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
+                <label>Username</label>
+                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                <span class="help-block"><?php echo $username_err; ?></span>
+            </div>
+
+            <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control">
+                <span class="help-block"><?php echo $password_err; ?></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Ingresa">
+            </div>
         </form>
 
         <script>
@@ -123,6 +229,5 @@
                 $("#" + $(this).val()).show().siblings().hide();
             })
         </script>
-
     </article>
 </div>
