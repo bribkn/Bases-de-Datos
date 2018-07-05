@@ -40,3 +40,32 @@ AND r.rol = 'tio'
 AND a.nombre LIKE '%$nombre_alumno%'
 AND a.apellido LIKE '%$apellido_alumno%'
 GROUP BY(u.rut,f.patente);
+
+-- Modificar el número de teléfono de un tío.
+UPDATE usuarios
+SET telefono = '%$telefono_tio%'
+WHERE CAST(rut AS TEXT) = '$rut_tio';
+
+--Modificar el número de teléfono de un apoderado.
+UPDATE usuarios
+SET telefono = '%$telefono_apoderado%'
+WHERE CAST(rut AS TEXT) = '$rut_apoderado';
+
+--Modificar el número de teléfono de un alumno.
+UPDATE alumnos
+SET telefono = '%$telefono_alumno%'
+WHERE CAST(id AS TEXT) = '$id_alumno';
+
+--Modificar el furgón de un alumno.
+UPDATE alumnos
+SET patente_furgon = '%$patente_furgon_alumno%'
+WHERE CAST(id AS TEXT) = '$id_alumno';
+
+--Modificar el furgón de un tío.
+UPDATE furgones
+SET patente = '%$patente_furgon%', marca =  '%$marca_furgon%', modelo = '%$modelo_furgon%', capacidad = '%$capacidad_furgon%', ano = '%$ano_furgon%'
+WHERE CAST(rut_tio AS TEXT) = '$rut_tio';
+
+--Registrar un tío.
+--Registrar un apoderado.
+--Registrar un alumno.
