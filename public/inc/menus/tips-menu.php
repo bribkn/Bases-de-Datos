@@ -5,6 +5,7 @@
         <ul>
             <li><a href="index.php?page=account">Mi perfil</a></li>
             <li><a href="index.php?page=db-search">Búsqueda en BDD</a></li>
+            <li><a href="index.php?page=db-update">Modificar BDD</a></li>
             <li><a href="index.php?page=logout">Logout</a></li>
         </ul>
     <?php }else{ ?>

@@ -9,7 +9,7 @@
             session_start();
 
             if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-                die ("Ya te encuentras logeado.</article></div>");
+                header("location:index.php?page=account");
             }
 
             // Define variables and initialize with empty values
